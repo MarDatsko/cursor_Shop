@@ -95,6 +95,7 @@ public class LoginController {
             NAME_USER = nickName;
             goToTheMainPage();
         }else if(loginText.equals("admin") && passwordText.equals("admin")){
+            NAME_USER = "admin";
             goToTheAdminPage();
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);

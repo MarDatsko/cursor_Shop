@@ -8,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import model.Messages;
 import model.Product;
 import model.User;
 import sample.Const;
@@ -62,30 +63,43 @@ public class AdminController {
     @FXML
     void initialize() {
         fillCommonBoxWithUsers();
+        showAllProducts();
+        System.out.println(LoginController.NAME_USER);
 
-        //addButton
+        sendButton.setOnAction(actionEvent -> {
+            sendMessages();
+            showMessages(String.valueOf(choseUserComboBox.getValue()));
+        });
 
-        //save get ID, Update in database, refresh;
-        
-        allProductsButton.setOnAction(actionEvent -> {
+        choseUserComboBox.setOnAction(actionEvent -> {
+            showMessages(String.valueOf(choseUserComboBox.getValue()));
+            printOrder(String.valueOf(choseUserComboBox.getValue()));
+        });
+
+        addButton.setOnAction(actionEvent -> {
             DatabeseHandler handler = new DatabeseHandler();
-            ResultSet resultSet = handler.getProduct();
-            ObservableList list = FXCollections.observableArrayList();
-            try {
-                while (resultSet.next()) {
-                    Product product = new Product();
-                    product.setId(resultSet.getInt(Const.PRODUCTS_ID));
-                    product.setName(resultSet.getString(Const.PRODUCTS_NAME));
-                    product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
-                    product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
+            Product product = new Product();
+            product.setName(brandText.getText());
+            product.setModel(modelText.getText());
+            product.setPrice(Double.valueOf(priceText.getText()));
+            handler.addProductsIntoDatabase(product);
+            clearBrandModelPrice();
+        });
 
-                    list.addAll(product);
-                }
-            } catch (SQLException t) {
-                t.getStackTrace();
-            }
-            allListView.getItems().clear();
-            allListView.getItems().addAll(list);
+        saveButton.setOnAction(actionEvent -> {
+            DatabeseHandler handler = new DatabeseHandler();
+            Product product = new Product();
+            product.setId(idEdit);
+            product.setName(brandText.getText());
+            product.setModel(modelText.getText());
+            product.setPrice(Double.valueOf(priceText.getText()));
+            handler.changeProductInDatabase(product);
+            clearBrandModelPrice();
+        });
+        //save get ID, Update in database, refresh;
+
+        allProductsButton.setOnAction(actionEvent -> {
+            showAllProducts();
         });
 
         allListView.setOnMouseClicked(mouseEvent -> {
@@ -109,6 +123,54 @@ public class AdminController {
         });
     }
 
+    private void printOrder(String buyer) {
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductOrder(buyer);
+        ObservableList list = FXCollections.observableArrayList();
+        try {
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt(Const.PRODUCTS_ID));
+                product.setName(resultSet.getString(Const.PRODUCTS_NAME));
+                product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
+                product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
+
+                list.addAll(product);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        allListView.getItems().clear();
+        allListView.getItems().addAll(list);
+    }
+
+    private void showAllProducts() {
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductAll();
+        ObservableList list = FXCollections.observableArrayList();
+        try {
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt(Const.PRODUCTS_ID));
+                product.setName(resultSet.getString(Const.PRODUCTS_NAME));
+                product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
+                product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
+
+                list.addAll(product);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        allListView.getItems().clear();
+        allListView.getItems().addAll(list);
+    }
+
+    private void clearBrandModelPrice() {
+        brandText.clear();
+        priceText.clear();
+        modelText.clear();
+    }
+
     private void fillCommonBoxWithUsers() {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getUsersNickName();
@@ -125,5 +187,33 @@ public class AdminController {
         choseUserComboBox.setItems(usersList);
     }
 
+    private void showMessages(String nickName){
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getMessagesNick(nickName);
+        ObservableList list = FXCollections.observableArrayList();
+        try {
+            while (resultSet.next()) {
+                Messages product = new Messages();
+                product.setId(resultSet.getInt(Const.MESSAGES_ID));
+                product.setAuthor(resultSet.getString(Const.MESSAGES_AUTHOR));
+                product.setMessages(resultSet.getString(Const.MESSAGES_MESSAGE));
+
+                list.addAll(product);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        messageList.getItems().clear();
+        messageList.getItems().addAll(list);
+    }
+
+    private void sendMessages(){
+        DatabeseHandler handler = new DatabeseHandler();
+        Messages message = new Messages();
+        message.setAuthor(LoginController.NAME_USER);
+        message.setMessages(writeMessage.getText());
+        message.setKeyUser(String.valueOf(choseUserComboBox.getValue()));
+        handler.sendMessagesIntoDatabase(message);
+    }
 }
 

@@ -51,6 +51,7 @@ public class MainPageControler {
     void initialize() {
         printProductsList();
         showAllMessages();
+        printOrderList();
 
         sendButton.setOnAction(actionEvent -> {
             sendMessages();
@@ -84,16 +85,69 @@ public class MainPageControler {
         productsList.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 ObservableList list = productsList.getSelectionModel().getSelectedItems();
+                addBuyer(list);
                 orderList.getItems().addAll(list);
+                productsList.getItems().clear();
+                printProductsList();
             }
         });
 
         orderList.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
+                ObservableList list = orderList.getSelectionModel().getSelectedItems();
                 int i = orderList.getSelectionModel().getSelectedIndex();      // int vs Integer ?????
+                removeBuyer(list);
                 orderList.getItems().remove(i);
+                productsList.getItems().clear();
+                printProductsList();
             }
         });
+    }
+
+    private void printOrderList() {
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductOrder(LoginController.NAME_USER);
+        ObservableList list = FXCollections.observableArrayList();
+        try {
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt(Const.PRODUCTS_ID));
+                product.setName(resultSet.getString(Const.PRODUCTS_NAME));
+                product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
+                product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
+
+                list.addAll(product);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        orderList.getItems().clear();
+        orderList.getItems().addAll(list);
+    }
+
+    private void removeBuyer(ObservableList list) {
+        DatabeseHandler handler = new DatabeseHandler();
+        Object object = list.get(0);
+        if(object instanceof Product){
+            Product product = (Product) object;
+            product.setId(product.getId());
+            product.setBuyer(null);
+            handler.setBuyer(product);
+
+        }
+    }
+
+    private void addBuyer(ObservableList list) {
+        DatabeseHandler handler = new DatabeseHandler();
+        Object object = list.get(0);
+        System.out.println(object.getClass());
+        if(object instanceof Product){
+            Product product = (Product) object;
+            product.setId(product.getId());
+            product.setBuyer(LoginController.NAME_USER);
+            handler.setBuyer(product);
+            System.out.println(product.getId() + LoginController.NAME_USER);
+        }
     }
 
     private void sendMessages() {
@@ -101,6 +155,7 @@ public class MainPageControler {
         Messages message = new Messages();
         message.setAuthor(LoginController.NAME_USER);
         message.setMessages(messagesText.getText());
+        message.setKeyUser(LoginController.NAME_USER);
         handler.sendMessagesIntoDatabase(message);
     }
 
@@ -126,7 +181,7 @@ public class MainPageControler {
 
     private void printProductsList() {
         DatabeseHandler handler = new DatabeseHandler();
-        ResultSet resultSet = handler.getProduct();
+        ResultSet resultSet = handler.getProductAll();
         ObservableList list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {

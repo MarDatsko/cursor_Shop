@@ -7,6 +7,7 @@ public class Product {
     private String name;
     private Double price;
     private String model;
+    private String buyer;
 
     @Override
     public String toString() {
@@ -20,11 +21,12 @@ public class Product {
 
     public Product(){}
 
-    public Product(Integer id, String name, Double price, String model) {
+    public Product(Integer id, String name, Double price, String model, String buyer) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.model = model;
+        this.buyer = buyer;
     }
 
     public Integer getId() {
@@ -57,5 +59,13 @@ public class Product {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
     }
 }

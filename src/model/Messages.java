@@ -4,6 +4,7 @@ public class Messages {
     private Integer id = 0;
     private String author;
     private String messages;
+    private String keyUser;
 
     @Override
     public String toString() {
@@ -12,10 +13,11 @@ public class Messages {
 
     public Messages(){}
 
-    public Messages(Integer id, String author, String messages) {
+    public Messages(Integer id, String author, String messages, String keyUser) {
         this.id = id;
         this.author = author;
         this.messages = messages;
+        this.keyUser = keyUser;
     }
 
     public String getAuthor() {
@@ -41,4 +43,13 @@ public class Messages {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public String getKeyUser() {
+        return keyUser;
+    }
+
+    public void setKeyUser(String keyUser) {
+        this.keyUser = keyUser;
+    }
+
 }

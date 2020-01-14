@@ -2,6 +2,7 @@ package sample;
 
 import controler.LoginController;
 import model.Messages;
+import model.Product;
 import model.User;
 
 import java.sql.*;
@@ -31,7 +32,6 @@ public class DatabeseHandler extends Configs {
             isAddedUser = true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            System.out.println("----------");
             isAddedUser = false;
         }
         return isAddedUser;
@@ -52,7 +52,7 @@ public class DatabeseHandler extends Configs {
         return resultSet;
     }
 
-    public ResultSet getProduct() {
+    public ResultSet getProductAll() {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products";
         try {
@@ -98,9 +98,9 @@ public class DatabeseHandler extends Configs {
                 + "VALUES (?,?,?)";
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
-            prSt.setString(1, message.getAuthor());
+            prSt.setString(1,message.getAuthor());
             prSt.setString(2, message.getMessages());
-            prSt.setString(3, LoginController.NAME_USER);
+            prSt.setString(3, message.getKeyUser());
 
             prSt.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -113,6 +113,77 @@ public class DatabeseHandler extends Configs {
         String sql = "SELECT "+Const.USER_NICK_NAME+" FROM cursor.users";
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public void addProductsIntoDatabase(Product product) {
+        String sql = "INSERT INTO cursor.products"+"("+Const.PRODUCTS_NAME+","+Const.PRODUCTS_PRICE+","+Const.PRODUCTS_MODEL+")"
+                +"VALUES (?,?,?)";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1, product.getName());
+            prSt.setString(2, String.valueOf(product.getPrice()));
+            prSt.setString(3, product.getModel());
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeProductInDatabase(Product product) {
+        String sql = "UPDATE cursor.products SET name=?, price=?, model=? WHERE idproducts=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1, product.getName());
+            prSt.setString(2, String.valueOf(product.getPrice()));
+            prSt.setString(3, product.getModel());
+            prSt.setString(4, String.valueOf(product.getId()));
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet getMessagesNick(String nickName) {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.messages WHERE author=? AND keyUser=? OR author=?" ;
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1,"admin");
+            prSt.setString(2, nickName);
+            prSt.setString(3, nickName);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public void setBuyer(Product product) {
+        String sql = "UPDATE cursor.products SET buyer=? WHERE idproducts=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1, product.getBuyer());
+            prSt.setString(2, String.valueOf(product.getId()));
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet getProductOrder(String buyer) {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.products WHERE buyer=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1,buyer);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
