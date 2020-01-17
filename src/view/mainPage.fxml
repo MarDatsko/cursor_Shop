@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Pagination?>
@@ -9,6 +10,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controler.MainPageControler">
     <children>
@@ -17,17 +19,17 @@
                 <Image url="@../resurses/fon.jpg" />
             </image>
         </ImageView>
-        <ImageView fitHeight="114.0" fitWidth="137.0" layoutX="554.0" layoutY="6.0">
+        <ImageView fitHeight="114.0" fitWidth="137.0" layoutX="555.0" layoutY="39.0">
             <image>
                 <Image url="@../resurses/logo.png" />
             </image>
         </ImageView>
-      <AnchorPane layoutX="13.0" layoutY="14.0">
+      <VBox layoutX="14.0" layoutY="47.0" prefHeight="340.0" prefWidth="256.0">
          <children>
-            <ListView id="pagination" fx:id="productsList" layoutX="1.0" prefHeight="372.0" prefWidth="255.0" />
-            <Pagination id="pagination" layoutX="-1.0" layoutY="327.0" prefHeight="45.0" prefWidth="256.0" />
+            <ListView id="pagination" fx:id="productsList" prefHeight="326.0" prefWidth="256.0" />
+            <Pagination id="pagination" fx:id="pagination" prefHeight="89.0" prefWidth="256.0" />
          </children>
-      </AnchorPane>
+      </VBox>
       <TextField fx:id="searchTextField" layoutX="287.0" layoutY="14.0" prefHeight="25.0" prefWidth="126.0" promptText="Search" />
       <ListView fx:id="orderList" layoutX="292.0" layoutY="160.0" prefHeight="95.0" prefWidth="255.0" />
       <Button fx:id="search" layoutX="419.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Search" />
@@ -35,5 +37,8 @@
       <TextArea fx:id="messagesText" layoutX="289.0" layoutY="349.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.6" prefHeight="25.0" prefWidth="310.0" promptText="Write message" />
       <Button fx:id="sendButton" layoutX="609.0" layoutY="349.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="83.0" text="Send" />
       <ListView fx:id="messagesList" blendMode="DIFFERENCE" cache="true" depthTest="DISABLE" layoutX="289.0" layoutY="263.0" prefHeight="80.0" prefWidth="400.0" />
+      <ChoiceBox fx:id="sortProducts" layoutX="113.0" layoutY="14.0" prefWidth="150.0" />
+      <Label layoutX="26.0" layoutY="18.0" prefHeight="17.0" prefWidth="73.0" text="Sort By" textFill="RED" />
+      <Button fx:id="exitButton" layoutX="640.0" layoutY="14.0" mnemonicParsing="false" text="EXIT" />
     </children>
 </AnchorPane>

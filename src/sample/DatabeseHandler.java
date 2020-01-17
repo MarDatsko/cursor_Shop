@@ -32,7 +32,6 @@ public class DatabeseHandler extends Configs {
             isAddedUser = true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            isAddedUser = false;
         }
         return isAddedUser;
     }
@@ -51,19 +50,6 @@ public class DatabeseHandler extends Configs {
         }
         return resultSet;
     }
-
-    public ResultSet getProductAll() {
-        ResultSet resultSet = null;
-        String sql = "SELECT * FROM cursor.products";
-        try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
-            resultSet = prSt.executeQuery();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }
-
 
     public ResultSet getProductByName(String txt) {
         ResultSet resultSet = null;
@@ -184,6 +170,54 @@ public class DatabeseHandler extends Configs {
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
             prSt.setString(1,buyer);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getProductAll() {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getProductSortProductsByPrice() {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY price DESC";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getProductSortProductsByBrand() {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY name";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getProductSortProductsById() {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY idproducts";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

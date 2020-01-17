@@ -1,5 +1,6 @@
 package controler;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,18 +9,21 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import model.Messages;
 import model.Product;
 import sample.Const;
 import sample.DatabeseHandler;
 
 public class MainPageControler {
-
+    private final String byPrice = "Price";
+    private final String byBrand = "Brand";
+    private final String byId = "ID";
+    private String sortChose = byId;
     @FXML
     private ResourceBundle resources;
 
@@ -27,13 +31,22 @@ public class MainPageControler {
     private URL location;
 
     @FXML
-    private ListView<?> productsList;
+    private ListView<Product> productsList;
 
     @FXML
     private TextField searchTextField;
 
     @FXML
-    private ListView<?> orderList;
+    private ListView<Product> orderList;
+
+    @FXML
+    private Pagination pagination;
+
+    @FXML
+    private ChoiceBox<String> sortProducts;
+
+    @FXML
+    private Button exitButton;
 
     @FXML
     private Button search;
@@ -45,61 +58,68 @@ public class MainPageControler {
     private Button sendButton;
 
     @FXML
-    private ListView<?> messagesList;
+    private ListView<Messages> messagesList;
 
     @FXML
     void initialize() {
-        printProductsList();
+        printProductsList(sortChose);
         showAllMessages();
         printOrderList();
+        fillChoseBox();
+
+        sortProducts.setOnAction(actionEvent -> {
+            sortChose = sortProducts.getValue();
+            printProductsList(sortChose);
+        });
 
         sendButton.setOnAction(actionEvent -> {
             sendMessages();
             showAllMessages();
-            //sendButton.setStyle("-fx-background-color: red");
+        });
+
+        exitButton.setOnAction(actionEvent -> {
+            exitButton.getScene().getWindow().hide();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/sample.fxml"));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
         });
 
         search.setOnAction(actionEvent -> {
             DatabeseHandler handler = new DatabeseHandler();
             String txt = searchTextField.getText();
-            System.out.println(txt);
             ResultSet resultSet =  handler.getProductByName(txt);
-            ObservableList list = FXCollections.observableArrayList();
-            try {
-                while (resultSet.next()) {
-                    Product product = new Product();
-                    product.setId(resultSet.getInt(Const.PRODUCTS_ID));
-                    product.setName(resultSet.getString(Const.PRODUCTS_NAME));
-                    product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
-                    product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
+            ObservableList<Product> list = writeResultInList(resultSet);
 
-                    list.addAll(product);
-                }
-            } catch (SQLException t) {
-                t.getStackTrace();
-            }
             productsList.getItems().clear();
             productsList.getItems().addAll(list);
         });
 
         productsList.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
-                ObservableList list = productsList.getSelectionModel().getSelectedItems();
+                ObservableList<Product> list = productsList.getSelectionModel().getSelectedItems();
                 addBuyer(list);
                 orderList.getItems().addAll(list);
                 productsList.getItems().clear();
-                printProductsList();
+                printProductsList(sortChose);
             }
         });
 
         orderList.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
-                ObservableList list = orderList.getSelectionModel().getSelectedItems();
+                ObservableList<Product> list = orderList.getSelectionModel().getSelectedItems();
                 int i = orderList.getSelectionModel().getSelectedIndex();      // int vs Integer ?????
                 removeBuyer(list);
                 orderList.getItems().remove(i);
                 productsList.getItems().clear();
-                printProductsList();
+                printProductsList(sortChose);
             }
         });
     }
@@ -107,47 +127,26 @@ public class MainPageControler {
     private void printOrderList() {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getProductOrder(LoginController.NAME_USER);
-        ObservableList list = FXCollections.observableArrayList();
-        try {
-            while (resultSet.next()) {
-                Product product = new Product();
-                product.setId(resultSet.getInt(Const.PRODUCTS_ID));
-                product.setName(resultSet.getString(Const.PRODUCTS_NAME));
-                product.setPrice(resultSet.getDouble(Const.PRODUCTS_PRICE));
-                product.setModel(resultSet.getString(Const.PRODUCTS_MODEL));
-
-                list.addAll(product);
-            }
-        } catch (SQLException t) {
-            t.getStackTrace();
-        }
+        ObservableList<Product> list = writeResultInList(resultSet);
         orderList.getItems().clear();
         orderList.getItems().addAll(list);
+
     }
 
-    private void removeBuyer(ObservableList list) {
+    private void removeBuyer(ObservableList<Product> list) {
         DatabeseHandler handler = new DatabeseHandler();
-        Object object = list.get(0);
-        if(object instanceof Product){
-            Product product = (Product) object;
+            Product product = list.get(0);
             product.setId(product.getId());
             product.setBuyer(null);
             handler.setBuyer(product);
-
-        }
     }
 
-    private void addBuyer(ObservableList list) {
+    private void addBuyer(ObservableList<Product> list) {
         DatabeseHandler handler = new DatabeseHandler();
-        Object object = list.get(0);
-        System.out.println(object.getClass());
-        if(object instanceof Product){
-            Product product = (Product) object;
+            Product product =list.get(0);
             product.setId(product.getId());
             product.setBuyer(LoginController.NAME_USER);
             handler.setBuyer(product);
-            System.out.println(product.getId() + LoginController.NAME_USER);
-        }
     }
 
     private void sendMessages() {
@@ -162,7 +161,7 @@ public class MainPageControler {
     private void showAllMessages() {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getMessages();
-        ObservableList list = FXCollections.observableArrayList();
+        ObservableList<Messages> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
                 Messages product = new Messages();
@@ -179,10 +178,8 @@ public class MainPageControler {
         messagesList.getItems().addAll(list);
     }
 
-    private void printProductsList() {
-        DatabeseHandler handler = new DatabeseHandler();
-        ResultSet resultSet = handler.getProductAll();
-        ObservableList list = FXCollections.observableArrayList();
+    private ObservableList<Product> writeResultInList(ResultSet resultSet){
+        ObservableList<Product> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
                 Product product = new Product();
@@ -196,7 +193,56 @@ public class MainPageControler {
         } catch (SQLException t) {
             t.getStackTrace();
         }
+        return list;
+    }
+
+    private void fillChoseBox(){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        list.add(byId);
+        list.add(byPrice);
+        list.add(byBrand);
+        sortProducts.setValue(byId);
+        sortProducts.setItems(list);
+    }
+
+    private void printProductsList(String sort) {
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet;
+        if(sort.equals(byBrand)){
+            resultSet = handler.getProductSortProductsByBrand();
+        }else if(sort.equals(byPrice)){
+            resultSet = handler.getProductSortProductsByPrice();
+        }else{
+            resultSet = handler.getProductSortProductsById();
+        }
+        ObservableList<Product> list = writeResultInList(resultSet);
+        productsList.getItems().clear();
         productsList.getItems().addAll(list);
     }
+/*
+    private void sortByPrice(){
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductSortProductsByPrice();
+        ObservableList<Product> list = writeResultInList(resultSet);
+        productsList.getItems().clear();
+        productsList.getItems().addAll(list);
+    }
+
+    private void sortByBrand(){
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductSortProductsByBrand();
+        ObservableList<Product> list = writeResultInList(resultSet);
+        productsList.getItems().clear();
+        productsList.getItems().addAll(list);
+    }
+
+    private void sortById(){
+        DatabeseHandler handler = new DatabeseHandler();
+        ResultSet resultSet = handler.getProductSortProductsById();
+        ObservableList<Product> list = writeResultInList(resultSet);
+        productsList.getItems().clear();
+        productsList.getItems().addAll(list);
+    }
+    */
 }
 
