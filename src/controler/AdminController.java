@@ -1,5 +1,6 @@
 package controler;
 
+import com.mysql.cj.protocol.Message;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class AdminController {
     public static Integer idEdit;
 
     @FXML
-    private ListView<?> allListView;
+    private ListView<Product> allListView;
 
     @FXML
     private Button blockButton;
@@ -33,7 +34,7 @@ public class AdminController {
     private Label totalMoney;
 
     @FXML
-    private ComboBox<?> choseUserComboBox;
+    private ComboBox<User> choseUserComboBox;
 
     @FXML
     private TextField brandText;
@@ -54,7 +55,7 @@ public class AdminController {
     private Button unconfirmButton;
 
     @FXML
-    private ListView<?> messageList;
+    private ListView<Messages> messageList;
 
     @FXML
     private TextArea writeMessage;
@@ -73,6 +74,7 @@ public class AdminController {
         fillCommonBoxWithUsers();
         showAllProducts();
         System.out.println(LoginController.NAME_USER);
+        totalMoney.setText(calculatePrice().toString());
 
         unconfirmButton.setOnAction(actionEvent -> {
             DatabeseHandler dbHendler = new DatabeseHandler();
@@ -115,6 +117,8 @@ public class AdminController {
             showButtonColor();
             showMessages(String.valueOf(choseUserComboBox.getValue()));
             printOrder(String.valueOf(choseUserComboBox.getValue()));
+            userMoney.setText(String.valueOf(getUserMoney()));
+            totalMoney.setText(String.valueOf(calculatePrice()));
         });
 
         addButton.setOnAction(actionEvent -> {
@@ -140,27 +144,16 @@ public class AdminController {
             showAllProducts();
         });
 
-        allProductsButton.setOnAction(actionEvent -> {
-            showAllProducts();
-        });
+        allProductsButton.setOnAction(actionEvent -> showAllProducts());
 
         allListView.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
-                String brand = null;
-                String model = null;
-                Double price = 0.0d;
-                ObservableList list = allListView.getSelectionModel().getSelectedItems();
-                Object object = list.get(0);
-                if(object instanceof Product){
-                    Product product = (Product) object;
-                    idEdit = product.getId();
-                    brand = product.getName();
-                    model = product.getModel();
-                    price = product.getPrice();
-                }
-                brandText.setText(brand);
-                modelText.setText(model);
-                priceText.setText(price.toString());
+                ObservableList<Product> list = allListView.getSelectionModel().getSelectedItems();
+                Product product = list.get(0);
+                idEdit = product.getId();
+                brandText.setText(product.getName());
+                modelText.setText(product.getModel());
+                priceText.setText(String.valueOf(product.getPrice()));
             }
         });
     }
@@ -202,10 +195,29 @@ public class AdminController {
         }
     }
 
+    private Double calculatePrice() {
+        return allListView.getItems().stream().mapToDouble(Product::getPrice).sum();
+    }
+
+    private Double getUserMoney(){
+        DatabeseHandler handler = new DatabeseHandler();
+        handler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        double userMoney = 0.0d;
+        ResultSet resultSet = handler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        try {
+            while (resultSet.next()) {
+                userMoney = resultSet.getDouble(Const.USER_MONEY);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        return userMoney;
+    }
+
     private void printOrder(String buyer) {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getProductOrder(buyer);
-        ObservableList list = FXCollections.observableArrayList();
+        ObservableList<Product> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
                 Product product = new Product();
@@ -226,7 +238,7 @@ public class AdminController {
     private void showAllProducts() {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getProductAll();
-        ObservableList list = FXCollections.observableArrayList();
+        ObservableList<Product> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
                 Product product = new Product();
@@ -253,7 +265,7 @@ public class AdminController {
     private void fillCommonBoxWithUsers() {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getUsersNickName();
-        ObservableList usersList = FXCollections.observableArrayList();
+        ObservableList<User> usersList = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
                 User user = new User();
@@ -269,15 +281,15 @@ public class AdminController {
     private void showMessages(String nickName){
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getMessagesNick(nickName);
-        ObservableList list = FXCollections.observableArrayList();
+        ObservableList<Messages> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
-                Messages product = new Messages();
-                product.setId(resultSet.getInt(Const.MESSAGES_ID));
-                product.setAuthor(resultSet.getString(Const.MESSAGES_AUTHOR));
-                product.setMessages(resultSet.getString(Const.MESSAGES_MESSAGE));
+                Messages messages = new Messages();
+                messages.setId(resultSet.getInt(Const.MESSAGES_ID));
+                messages.setAuthor(resultSet.getString(Const.MESSAGES_AUTHOR));
+                messages.setMessages(resultSet.getString(Const.MESSAGES_MESSAGE));
 
-                list.addAll(product);
+                list.addAll(messages);
             }
         } catch (SQLException t) {
             t.getStackTrace();

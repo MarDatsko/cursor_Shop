@@ -2,9 +2,12 @@ package controler;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.DoubleStream;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +27,7 @@ public class MainPageControler {
     private final String byBrand = "Brand";
     private final String byId = "ID";
     private String sortChose = byId;
+
     @FXML
     private ResourceBundle resources;
 
@@ -67,11 +71,16 @@ public class MainPageControler {
     private ListView<Messages> messagesList;
 
     @FXML
+    private Label yourMoney;
+
+    @FXML
     void initialize() {
         printProductsList(sortChose);
         showAllMessages();
         printOrderList();
         fillChoseBox();
+        moneyLabel.setText(String.valueOf(calculatePrice()));
+        yourMoney.setText(String.valueOf(getUserMoney()));
 
         sortProducts.setOnAction(actionEvent -> {
             sortChose = sortProducts.getValue();
@@ -115,6 +124,7 @@ public class MainPageControler {
                 orderList.getItems().addAll(list);
                 productsList.getItems().clear();
                 printProductsList(sortChose);
+                moneyLabel.setText(String.valueOf(calculatePrice()));
             }
         });
 
@@ -126,8 +136,28 @@ public class MainPageControler {
                 orderList.getItems().remove(i);
                 productsList.getItems().clear();
                 printProductsList(sortChose);
+                moneyLabel.setText(String.valueOf(calculatePrice()));
             }
         });
+    }
+
+    private Double calculatePrice() {
+        return orderList.getItems().stream().mapToDouble(Product::getPrice).sum();
+    }
+
+    private Double getUserMoney(){
+        DatabeseHandler handler = new DatabeseHandler();
+        handler.getUserAndOrderStatus(LoginController.NAME_USER);
+        Double userMoney = 0.0d;
+        ResultSet resultSet = handler.getUserAndOrderStatus(LoginController.NAME_USER);
+        try {
+            while (resultSet.next()) {
+                userMoney = resultSet.getDouble(Const.USER_MONEY);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        return userMoney;
     }
 
     private void printOrderList() {

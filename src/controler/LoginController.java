@@ -79,7 +79,7 @@ public class LoginController {
         user.setPassword(textFieldPassword.getText());
         String nickName = null;
         String password = null;
-        Integer statusUser = 0;
+        int statusUser = 0;
         ResultSet resultSet = dbHendler.getUser(user);
         try {
             while (resultSet.next()) {

@@ -10,6 +10,7 @@ public class Const {
     public static final String USER_GENDER = "gender";
     public static final String USER_STATUS_USER = "statususer";
     public static final String USER_STATUS_ORDER = "statusorder";
+    public static final String USER_MONEY = "money";
 
     public static final String PRODUCTS_NAME = "name";
     public static final String PRODUCTS_PRICE = "price";
