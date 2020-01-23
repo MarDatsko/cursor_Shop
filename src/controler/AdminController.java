@@ -3,16 +3,12 @@ package controler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import model.Messages;
 import model.Product;
 import model.User;
-import sample.Const;
-import sample.DatabeseHandler;
+import dao.Const;
+import dao.DatabeseHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +19,18 @@ public class AdminController {
 
     @FXML
     private ListView<?> allListView;
+
+    @FXML
+    private Button blockButton;
+
+    @FXML
+    private Button unblockButton;
+
+    @FXML
+    private Label userMoney;
+
+    @FXML
+    private Label totalMoney;
 
     @FXML
     private ComboBox<?> choseUserComboBox;
@@ -66,12 +74,45 @@ public class AdminController {
         showAllProducts();
         System.out.println(LoginController.NAME_USER);
 
+        unconfirmButton.setOnAction(actionEvent -> {
+            DatabeseHandler dbHendler = new DatabeseHandler();
+            dbHendler.unconfirmUser(String.valueOf(choseUserComboBox.getValue()));
+            unconfirmButton.setStyle("-fx-background-color: #FF0000");
+            confirmButton.setStyle("-fx-background-color: #DCDCDC");
+            showButtonColor();
+        });
+
+        confirmButton.setOnAction(actionEvent -> {
+            DatabeseHandler dbHendler = new DatabeseHandler();
+            dbHendler.confirmUser(String.valueOf(choseUserComboBox.getValue()));
+            confirmButton.setStyle("-fx-background-color: #32CD32");
+            unconfirmButton.setStyle("-fx-background-color: #DCDCDC");
+            showButtonColor();
+        });
+
+        blockButton.setOnAction(actionEvent -> {
+            DatabeseHandler dbHendler = new DatabeseHandler();
+            dbHendler.blockUser(String.valueOf(choseUserComboBox.getValue()));
+            blockButton.setStyle("-fx-background-color: #FF0000");
+            unblockButton.setStyle("-fx-background-color: #DCDCDC");
+            showButtonColor();
+        });
+
+        unblockButton.setOnAction(actionEvent -> {
+            DatabeseHandler dbHendler = new DatabeseHandler();
+            dbHendler.unblockUser(String.valueOf(choseUserComboBox.getValue()));
+            unblockButton.setStyle("-fx-background-color: #32CD32");
+            blockButton.setStyle("-fx-background-color: #DCDCDC");
+            showButtonColor();
+        });
+
         sendButton.setOnAction(actionEvent -> {
             sendMessages();
             showMessages(String.valueOf(choseUserComboBox.getValue()));
         });
 
         choseUserComboBox.setOnAction(actionEvent -> {
+            showButtonColor();
             showMessages(String.valueOf(choseUserComboBox.getValue()));
             printOrder(String.valueOf(choseUserComboBox.getValue()));
         });
@@ -84,6 +125,7 @@ public class AdminController {
             product.setPrice(Double.valueOf(priceText.getText()));
             handler.addProductsIntoDatabase(product);
             clearBrandModelPrice();
+            showAllProducts();
         });
 
         saveButton.setOnAction(actionEvent -> {
@@ -95,8 +137,8 @@ public class AdminController {
             product.setPrice(Double.valueOf(priceText.getText()));
             handler.changeProductInDatabase(product);
             clearBrandModelPrice();
+            showAllProducts();
         });
-        //save get ID, Update in database, refresh;
 
         allProductsButton.setOnAction(actionEvent -> {
             showAllProducts();
@@ -121,6 +163,43 @@ public class AdminController {
                 priceText.setText(price.toString());
             }
         });
+    }
+
+    private void showButtonColor() {
+        DatabeseHandler dbHendler = new DatabeseHandler();
+        int statusUser = 0;
+        int statusOrder = 0;
+        ResultSet resultSet = dbHendler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        try {
+            while (resultSet.next()) {
+                statusUser = resultSet.getInt(Const.USER_STATUS_USER);
+                statusOrder = resultSet.getInt(Const.USER_STATUS_ORDER);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+
+        if(statusUser==0 & statusOrder==0){
+            blockButton.setStyle("-fx-background-color: #FF0000");
+            unblockButton.setStyle("-fx-background-color: #DCDCDC");
+            unconfirmButton.setStyle("-fx-background-color: #FF0000");
+            confirmButton.setStyle("-fx-background-color: #DCDCDC");
+        }else if (statusUser!=0 & statusOrder!=0){
+            unblockButton.setStyle("-fx-background-color: #32CD32");
+            blockButton.setStyle("-fx-background-color: #DCDCDC");
+            unconfirmButton.setStyle("-fx-background-color: #DCDCDC");
+            confirmButton.setStyle("-fx-background-color: #32CD32");
+        }else if (statusUser==0 & statusOrder!=0){
+            unblockButton.setStyle("-fx-background-color: #DCDCDC");
+            blockButton.setStyle("-fx-background-color: #FF0000");
+            unconfirmButton.setStyle("-fx-background-color: #DCDCDC");
+            confirmButton.setStyle("-fx-background-color: #32CD32");
+        }else if (statusUser!=0 & statusOrder==0){
+            unblockButton.setStyle("-fx-background-color: #32CD32");
+            blockButton.setStyle("-fx-background-color: #DCDCDC");
+            unconfirmButton.setStyle("-fx-background-color: #FF0000");
+            confirmButton.setStyle("-fx-background-color: #DCDCDC");
+        }
     }
 
     private void printOrder(String buyer) {

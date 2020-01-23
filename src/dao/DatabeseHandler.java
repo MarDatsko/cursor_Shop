@@ -1,4 +1,4 @@
-package sample;
+package dao;
 
 import controler.LoginController;
 import model.Messages;
@@ -17,7 +17,7 @@ public class DatabeseHandler extends Configs {
     public boolean singUpUser(User user) {
         boolean isAddedUser = false;
         String insert = "INSERT INTO " + Const.USER_TABLE + "(" + Const.USER_NICK_NAME + "," + Const.USER_FIRST_NAME
-                + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER + ")"
+                + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER +"money"+ ")"
                 + "VALUES(?,?,?,?,?,?)";
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(insert);
@@ -27,6 +27,7 @@ public class DatabeseHandler extends Configs {
             prSt.setString(4, user.getPassword());
             prSt.setString(5, user.getCountry());
             prSt.setString(6, user.getGender());
+            prSt.setDouble(7,user.getMoney());
 
             prSt.executeUpdate();
             isAddedUser = true;
@@ -223,5 +224,71 @@ public class DatabeseHandler extends Configs {
             e.printStackTrace();
         }
         return resultSet;
+    }
+
+    public void blockUser(String nickName) {
+        String sql = "UPDATE cursor.users SET statususer=? WHERE nickname=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setInt(1, 0);
+            prSt.setString(2, nickName);
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unblockUser(String nickName) {
+        String sql = "UPDATE cursor.users SET statususer=? WHERE nickname=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setInt(1, 1);
+            prSt.setString(2, nickName);
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet getUserAndOrderStatus(String nickName) {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM cursor.users WHERE nickname=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setString(1,nickName);
+
+            resultSet = prSt.executeQuery();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public void unconfirmUser(String nickName) {
+        String sql = "UPDATE cursor.users SET statusorder=? WHERE nickname=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setInt(1, 0);
+            prSt.setString(2, nickName);
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void confirmUser(String nickName) {
+        String sql = "UPDATE cursor.users SET statusorder=? WHERE nickname=?";
+        try {
+            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            prSt.setInt(1, 1);
+            prSt.setString(2, nickName);
+
+            prSt.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

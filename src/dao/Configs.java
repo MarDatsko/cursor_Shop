@@ -1,4 +1,4 @@
-package sample;
+package dao;
 
 public class Configs {
     protected String dbHost = "localhost";

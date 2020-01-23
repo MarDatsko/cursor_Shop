@@ -40,5 +40,8 @@
       <ChoiceBox fx:id="sortProducts" layoutX="113.0" layoutY="14.0" prefWidth="150.0" />
       <Label layoutX="26.0" layoutY="18.0" prefHeight="17.0" prefWidth="73.0" text="Sort By" textFill="RED" />
       <Button fx:id="exitButton" layoutX="640.0" layoutY="14.0" mnemonicParsing="false" text="EXIT" />
+      <Label layoutX="555.0" layoutY="209.0" text="Label" />
+      <Label fx:id="moneyLabel" layoutX="555.0" layoutY="224.0" prefHeight="25.0" prefWidth="73.0" text="Label" />
+      <Button fx:id="buyButton" layoutX="625.0" layoutY="226.0" mnemonicParsing="false" text="Buy" />
     </children>
 </AnchorPane>

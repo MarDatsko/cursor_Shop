@@ -7,6 +7,9 @@ public class User {
     private String password;
     private String country;
     private String gender;
+    private Double money;
+    private Boolean statusUser;
+    private Boolean statusOrder;
 
     @Override
     public String toString() {
@@ -16,13 +19,15 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String secondName, String nickName, String password, String country, String gender) {
+    public User(String firstName, String secondName, String nickName, String password, String country,
+                String gender, Double money) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.nickName = nickName;
         this.password = password;
         this.country = country;
         this.gender = gender;
+        this.money = money;
     }
 
     public String getFirstName() {
@@ -73,6 +78,30 @@ public class User {
         this.gender = gender;
     }
 
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
+    public Boolean getStatusUser() {
+        return statusUser;
+    }
+
+    public void setStatusUser(Boolean statusUser) {
+        this.statusUser = statusUser;
+    }
+
+    public Boolean getStatusOrder() {
+        return statusOrder;
+    }
+
+    public void setStatusOrder(Boolean statusOrder) {
+        this.statusOrder = statusOrder;
+    }
+
     public boolean isUserHaveEmptyLine(User user) {
         boolean boo = false;
         boo = user.getNickName().isEmpty();
@@ -81,6 +110,7 @@ public class User {
         boo = user.getGender().isEmpty();
         boo = user.getFirstName().isEmpty();
         boo = user.getSecondName().isEmpty();
+        boo = String.valueOf(user.getMoney()).isEmpty();
         return boo;
     }
 }

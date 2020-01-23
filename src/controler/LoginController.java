@@ -15,8 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import sample.Const;
-import sample.DatabeseHandler;
+import dao.Const;
+import dao.DatabeseHandler;
 import model.User;
 
 public class LoginController {
@@ -79,19 +79,19 @@ public class LoginController {
         user.setPassword(textFieldPassword.getText());
         String nickName = null;
         String password = null;
+        Integer statusUser = 0;
         ResultSet resultSet = dbHendler.getUser(user);
-        System.out.println(resultSet);
-
         try {
             while (resultSet.next()) {
                 nickName = resultSet.getString(Const.USER_NICK_NAME);
                 password = resultSet.getString(Const.USER_PASSWORD);
+                statusUser = resultSet.getInt(Const.USER_STATUS_USER);
             }
         } catch (SQLException t) {
             t.getStackTrace();
         }
 
-        if (loginText.equals(nickName) && passwordText.equals(password)) {
+        if (loginText.equals(nickName) && passwordText.equals(password) && statusUser!=0) {
             NAME_USER = nickName;
             goToTheMainPage();
         }else if(loginText.equals("admin") && passwordText.equals("admin")){

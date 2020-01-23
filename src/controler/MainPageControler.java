@@ -16,8 +16,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Messages;
 import model.Product;
-import sample.Const;
-import sample.DatabeseHandler;
+import dao.Const;
+import dao.DatabeseHandler;
 
 public class MainPageControler {
     private final String byPrice = "Price";
@@ -47,6 +47,12 @@ public class MainPageControler {
 
     @FXML
     private Button exitButton;
+
+    @FXML
+    private Button buyButton;
+
+    @FXML
+    private Label moneyLabel;
 
     @FXML
     private Button search;
@@ -95,7 +101,7 @@ public class MainPageControler {
         search.setOnAction(actionEvent -> {
             DatabeseHandler handler = new DatabeseHandler();
             String txt = searchTextField.getText();
-            ResultSet resultSet =  handler.getProductByName(txt);
+            ResultSet resultSet = handler.getProductByName(txt);
             ObservableList<Product> list = writeResultInList(resultSet);
 
             productsList.getItems().clear();
@@ -135,18 +141,18 @@ public class MainPageControler {
 
     private void removeBuyer(ObservableList<Product> list) {
         DatabeseHandler handler = new DatabeseHandler();
-            Product product = list.get(0);
-            product.setId(product.getId());
-            product.setBuyer(null);
-            handler.setBuyer(product);
+        Product product = list.get(0);
+        product.setId(product.getId());
+        product.setBuyer(null);
+        handler.setBuyer(product);
     }
 
     private void addBuyer(ObservableList<Product> list) {
         DatabeseHandler handler = new DatabeseHandler();
-            Product product =list.get(0);
-            product.setId(product.getId());
-            product.setBuyer(LoginController.NAME_USER);
-            handler.setBuyer(product);
+        Product product = list.get(0);
+        product.setId(product.getId());
+        product.setBuyer(LoginController.NAME_USER);
+        handler.setBuyer(product);
     }
 
     private void sendMessages() {
@@ -178,7 +184,7 @@ public class MainPageControler {
         messagesList.getItems().addAll(list);
     }
 
-    private ObservableList<Product> writeResultInList(ResultSet resultSet){
+    private ObservableList<Product> writeResultInList(ResultSet resultSet) {
         ObservableList<Product> list = FXCollections.observableArrayList();
         try {
             while (resultSet.next()) {
@@ -196,7 +202,7 @@ public class MainPageControler {
         return list;
     }
 
-    private void fillChoseBox(){
+    private void fillChoseBox() {
         ObservableList<String> list = FXCollections.observableArrayList();
         list.add(byId);
         list.add(byPrice);
@@ -208,11 +214,11 @@ public class MainPageControler {
     private void printProductsList(String sort) {
         DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet;
-        if(sort.equals(byBrand)){
+        if (sort.equals(byBrand)) {
             resultSet = handler.getProductSortProductsByBrand();
-        }else if(sort.equals(byPrice)){
+        } else if (sort.equals(byPrice)) {
             resultSet = handler.getProductSortProductsByPrice();
-        }else{
+        } else {
             resultSet = handler.getProductSortProductsById();
         }
         ObservableList<Product> list = writeResultInList(resultSet);

@@ -33,11 +33,15 @@
       <Label layoutX="485.0" layoutY="168.0" prefHeight="17.0" prefWidth="52.0" text="Model" />
       <Button fx:id="confirmButton" layoutX="14.0" layoutY="189.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Confirm" />
       <Button fx:id="unconfirmButton" layoutX="95.0" layoutY="189.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Unconfirm" />
-      <Label contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" prefHeight="25.0" prefWidth="284.0" text="User Order" textAlignment="CENTER" textFill="#00ff9d" textOverrun="CLIP" wrapText="true" />
+      <Label contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" prefHeight="25.0" prefWidth="61.0" text="User Order" textAlignment="CENTER" textFill="#00ff9d" textOverrun="CLIP" wrapText="true" />
       <ListView fx:id="messageList" layoutX="14.0" layoutY="231.0" prefHeight="82.0" prefWidth="450.0" />
       <TextArea fx:id="writeMessage" layoutX="14.0" layoutY="326.0" prefHeight="47.0" prefWidth="368.0" promptText="Write message" />
       <Button fx:id="sendButton" layoutX="394.0" layoutY="326.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="69.0" text="Send" />
       <Button fx:id="addButton" layoutX="612.0" layoutY="189.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Add" />
       <Button fx:id="allProductsButton" layoutX="382.0" layoutY="14.0" mnemonicParsing="false" text="AllProducts" />
+      <Button fx:id="blockButton" layoutX="95.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Block" />
+      <Button fx:id="unblockButton" layoutX="14.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Unblock" />
+      <Label fx:id="userMoney" layoutX="249.0" layoutY="18.0" prefHeight="17.0" prefWidth="41.0" text="um" />
+      <Label fx:id="totalMoney" layoutX="307.0" layoutY="18.0" prefHeight="17.0" prefWidth="41.0" text="m" />
     </children>
 </AnchorPane>

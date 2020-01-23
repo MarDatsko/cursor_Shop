@@ -10,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import sample.DatabeseHandler;
+import dao.DatabeseHandler;
 import model.User;
 
 public class RegistrationController {
@@ -26,6 +26,9 @@ public class RegistrationController {
 
     @FXML
     private TextField textFieldSecondName;
+
+    @FXML
+    private TextField moneyTextField;
 
     @FXML
     private TextField textFieldNickName;
@@ -79,9 +82,15 @@ public class RegistrationController {
         String nickName = textFieldNickName.getText();
         String password = textFieldPassword.getText().trim();
         String country = countryTextField.getText();
-        String gender = radioButtonFemale.getText();
+        String gender;
+        if (radioButtonFemale.isPressed()){
+            gender = radioButtonFemale.getText();
+        }else {
+            gender = radioButtonMale.getText();
+        }
+        Double money = Double.valueOf(moneyTextField.getText());
 
-        User newUser = new User(firstName,secondName,nickName,password,country,gender);
+        User newUser = new User(firstName,secondName,nickName,password,country,gender,money);
         if (newUser.isUserHaveEmptyLine(newUser)){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("INFORMATION");
