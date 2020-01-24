@@ -1,14 +1,12 @@
 package controler;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.ResourceBundle;
-import java.util.stream.DoubleStream;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import dao.AlertWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,16 +21,12 @@ import dao.Const;
 import dao.DatabeseHandler;
 
 public class MainPageControler {
+    private DatabeseHandler handler = new DatabeseHandler();
+    private AlertWindow window = new AlertWindow();
     private final String byPrice = "Price";
     private final String byBrand = "Brand";
     private final String byId = "ID";
     private String sortChose = byId;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private ListView<Product> productsList;
@@ -76,11 +70,27 @@ public class MainPageControler {
     @FXML
     void initialize() {
         printProductsList(sortChose);
-        showAllMessages();
         printOrderList();
+        showAllMessages();
         fillChoseBox();
         moneyLabel.setText(String.valueOf(calculatePrice()));
         yourMoney.setText(String.valueOf(getUserMoney()));
+
+        buyButton.setOnAction(actionEvent -> {
+            int orderStatus = getOrderStatus();
+            if (orderList.getItems().stream().count() == 0){
+                window.showInformationWindow("You didn't choose any products");
+            }else if(orderStatus==0){
+                window.showInformationWindow("Please, wait admin should check the order");
+            } else {
+                List<Integer> listId = orderList.getItems().stream().map(Product::getId).collect(Collectors.toList());
+                handler.removeItemList(listId);
+                window.showInformationWindow("You have successfully purchased the product");
+                handler.unconfirmUser(LoginController.NAME_USER);
+                printProductsList(sortChose);
+                printOrderList();
+            }
+        });
 
         sortProducts.setOnAction(actionEvent -> {
             sortChose = sortProducts.getValue();
@@ -88,8 +98,13 @@ public class MainPageControler {
         });
 
         sendButton.setOnAction(actionEvent -> {
-            sendMessages();
-            showAllMessages();
+            if(messagesText.getText().isEmpty() || messagesText.getText().isBlank()){
+                window.showInformationWindow("Please, write message");
+            }else {
+                sendMessages();
+                showAllMessages();
+                messagesText.clear();
+            }
         });
 
         exitButton.setOnAction(actionEvent -> {
@@ -108,13 +123,17 @@ public class MainPageControler {
         });
 
         search.setOnAction(actionEvent -> {
-            DatabeseHandler handler = new DatabeseHandler();
-            String txt = searchTextField.getText();
-            ResultSet resultSet = handler.getProductByName(txt);
-            ObservableList<Product> list = writeResultInList(resultSet);
+            if(searchTextField.getText().isBlank() || searchTextField.getText().isEmpty()){
+                window.showInformationWindow("Please, write brand product in field");
+                printProductsList(sortChose);
+            }else {
+                String txt = searchTextField.getText();
+                ResultSet resultSet = handler.getProductByName(txt);
+                ObservableList<Product> list = writeResultInList(resultSet);
 
-            productsList.getItems().clear();
-            productsList.getItems().addAll(list);
+                productsList.getItems().clear();
+                productsList.getItems().addAll(list);
+            }
         });
 
         productsList.setOnMouseClicked(mouseEvent -> {
@@ -141,14 +160,27 @@ public class MainPageControler {
         });
     }
 
+    private int getOrderStatus() {
+        handler.getUserAndOrderStatus(LoginController.NAME_USER);
+        int orderStatus = 0;
+        ResultSet resultSet = handler.getUserAndOrderStatus(LoginController.NAME_USER);
+        try {
+            while (resultSet.next()) {
+                orderStatus = resultSet.getInt(Const.USER_STATUS_ORDER);
+            }
+        } catch (SQLException t) {
+            t.getStackTrace();
+        }
+        return orderStatus;
+    }
+
     private Double calculatePrice() {
         return orderList.getItems().stream().mapToDouble(Product::getPrice).sum();
     }
 
     private Double getUserMoney(){
-        DatabeseHandler handler = new DatabeseHandler();
         handler.getUserAndOrderStatus(LoginController.NAME_USER);
-        Double userMoney = 0.0d;
+        double userMoney = 0.0d;
         ResultSet resultSet = handler.getUserAndOrderStatus(LoginController.NAME_USER);
         try {
             while (resultSet.next()) {
@@ -161,7 +193,6 @@ public class MainPageControler {
     }
 
     private void printOrderList() {
-        DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getProductOrder(LoginController.NAME_USER);
         ObservableList<Product> list = writeResultInList(resultSet);
         orderList.getItems().clear();
@@ -170,7 +201,6 @@ public class MainPageControler {
     }
 
     private void removeBuyer(ObservableList<Product> list) {
-        DatabeseHandler handler = new DatabeseHandler();
         Product product = list.get(0);
         product.setId(product.getId());
         product.setBuyer(null);
@@ -178,7 +208,6 @@ public class MainPageControler {
     }
 
     private void addBuyer(ObservableList<Product> list) {
-        DatabeseHandler handler = new DatabeseHandler();
         Product product = list.get(0);
         product.setId(product.getId());
         product.setBuyer(LoginController.NAME_USER);
@@ -186,7 +215,6 @@ public class MainPageControler {
     }
 
     private void sendMessages() {
-        DatabeseHandler handler = new DatabeseHandler();
         Messages message = new Messages();
         message.setAuthor(LoginController.NAME_USER);
         message.setMessages(messagesText.getText());
@@ -195,7 +223,6 @@ public class MainPageControler {
     }
 
     private void showAllMessages() {
-        DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet = handler.getMessages();
         ObservableList<Messages> list = FXCollections.observableArrayList();
         try {
@@ -242,7 +269,6 @@ public class MainPageControler {
     }
 
     private void printProductsList(String sort) {
-        DatabeseHandler handler = new DatabeseHandler();
         ResultSet resultSet;
         if (sort.equals(byBrand)) {
             resultSet = handler.getProductSortProductsByBrand();
@@ -255,30 +281,5 @@ public class MainPageControler {
         productsList.getItems().clear();
         productsList.getItems().addAll(list);
     }
-/*
-    private void sortByPrice(){
-        DatabeseHandler handler = new DatabeseHandler();
-        ResultSet resultSet = handler.getProductSortProductsByPrice();
-        ObservableList<Product> list = writeResultInList(resultSet);
-        productsList.getItems().clear();
-        productsList.getItems().addAll(list);
-    }
-
-    private void sortByBrand(){
-        DatabeseHandler handler = new DatabeseHandler();
-        ResultSet resultSet = handler.getProductSortProductsByBrand();
-        ObservableList<Product> list = writeResultInList(resultSet);
-        productsList.getItems().clear();
-        productsList.getItems().addAll(list);
-    }
-
-    private void sortById(){
-        DatabeseHandler handler = new DatabeseHandler();
-        ResultSet resultSet = handler.getProductSortProductsById();
-        ObservableList<Product> list = writeResultInList(resultSet);
-        productsList.getItems().clear();
-        productsList.getItems().addAll(list);
-    }
-    */
 }
 

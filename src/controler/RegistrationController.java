@@ -1,9 +1,8 @@
 package controler;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
+import dao.AlertWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,12 +13,8 @@ import dao.DatabeseHandler;
 import model.User;
 
 public class RegistrationController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+    private DatabeseHandler handler = new DatabeseHandler();
+    private AlertWindow window = new AlertWindow();
 
     @FXML
     private TextField textFieldFirstName;
@@ -52,11 +47,29 @@ public class RegistrationController {
     private Button buttonSave;
 
     @FXML
+    private Button exitButton;
+
+    @FXML
     void initialize() {
         buttonSave.setOnAction(actionEvent -> {
             if (singUpNewUser()) {
                 returnToLoginPage();
             }
+        });
+
+        exitButton.setOnAction(actionEvent -> {
+            exitButton.getScene().getWindow().hide();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/sample.fxml"));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Parent root = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
         });
     }
 
@@ -76,29 +89,59 @@ public class RegistrationController {
     }
 
     private boolean singUpNewUser() {
-        DatabeseHandler dbHendler = new DatabeseHandler();
-        String firstName = textFieldFirstName.getText();
-        String secondName = textFieldSecondName.getText();
-        String nickName = textFieldNickName.getText();
-        String password = textFieldPassword.getText().trim();
-        String country = countryTextField.getText();
-        String gender;
-        if (radioButtonFemale.isPressed()){
-            gender = radioButtonFemale.getText();
-        }else {
-            gender = radioButtonMale.getText();
+        boolean isSingUp = false;
+        if (!isTextFieldNotEmpty()) {
+            String firstName = textFieldFirstName.getText();
+            String secondName = textFieldSecondName.getText();
+            String nickName = textFieldNickName.getText();
+            String password = textFieldPassword.getText().trim();
+            String country = countryTextField.getText();
+            String gender;
+            if (radioButtonFemale.isPressed()) {
+                gender = radioButtonFemale.getText();
+            } else {
+                gender = radioButtonMale.getText();
+            }
+            Double money= Double.valueOf(moneyTextField.getText());
+            User newUser = new User(firstName, secondName, nickName, password, country, gender, money);
+            isSingUp = handler.singUpUser(newUser);
         }
-        Double money = Double.valueOf(moneyTextField.getText());
+        return isSingUp;
+    }
 
-        User newUser = new User(firstName,secondName,nickName,password,country,gender,money);
-        if (newUser.isUserHaveEmptyLine(newUser)){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("INFORMATION");
-            alert.setHeaderText("Results: ");
-            alert.setContentText("Text view is empty");
-            alert.showAndWait();
+    private boolean isTextFieldNotEmpty(){
+        boolean isEmpty = false;
+        if(textFieldFirstName.getText().isEmpty() || textFieldFirstName.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(textFieldSecondName.getText().isEmpty() || textFieldSecondName.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(textFieldNickName.getText().isEmpty() || textFieldNickName.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(textFieldPassword.getText().isEmpty() || textFieldPassword.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(countryTextField.getText().isEmpty() || countryTextField.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(radioButtonFemale.isPressed()|| radioButtonMale.isPressed()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(moneyTextField.getText().isEmpty() || moneyTextField.getText().isBlank()){
+            isEmpty = true;
+            window.showErrorWindow("Text view is empty");
+        }else if(!moneyTextField.getText().isEmpty() || !moneyTextField.getText().isBlank()){
+            try {
+                Double money = Double.valueOf(moneyTextField.getText());
+                money.hashCode();
+            }catch (NumberFormatException e){
+                window.showErrorWindow("Change field Money!\nIn this field you must write only number");
+                isEmpty = true;
+            }
         }
-            return dbHendler.singUpUser(newUser);
+        return isEmpty;
     }
 }
 

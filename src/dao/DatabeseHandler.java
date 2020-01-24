@@ -6,6 +6,8 @@ import model.Product;
 import model.User;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DatabeseHandler extends Configs {
     public Connection getDbConnectiont() throws ClassNotFoundException, SQLException {
@@ -17,8 +19,8 @@ public class DatabeseHandler extends Configs {
     public boolean singUpUser(User user) {
         boolean isAddedUser = false;
         String insert = "INSERT INTO " + Const.USER_TABLE + "(" + Const.USER_NICK_NAME + "," + Const.USER_FIRST_NAME
-                + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER +"money"+ ")"
-                + "VALUES(?,?,?,?,?,?)";
+                + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER +",money"+ ")"
+                + "VALUES(?,?,?,?,?,?,?)";
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(insert);
             prSt.setString(1, user.getNickName());
@@ -54,7 +56,7 @@ public class DatabeseHandler extends Configs {
 
     public ResultSet getProductByName(String txt) {
         ResultSet resultSet = null;
-        String sql = "SELECT * FROM cursor.products WHERE name =?";
+        String sql = "SELECT * FROM cursor.products WHERE name =? AND buyer IS NULL";
         try {
             PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
             prSt.setString(1, txt);
@@ -289,6 +291,21 @@ public class DatabeseHandler extends Configs {
             prSt.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeItemList(List<Integer> iteamList) {
+        LinkedList<Integer> list = new LinkedList<>(iteamList);
+        String sql = "DELETE FROM cursor.products WHERE idproducts=?";
+        for (Integer id : list){
+            try {
+                PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+                prSt.setInt(1, id);
+
+                prSt.executeUpdate();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

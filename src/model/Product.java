@@ -19,6 +19,18 @@ public class Product {
         return Objects.hash(id, name, price, model);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(model, product.model) &&
+                Objects.equals(buyer, product.buyer);
+    }
+
     public Product(){}
 
     public Product(Integer id, String name, Double price, String model, String buyer) {
