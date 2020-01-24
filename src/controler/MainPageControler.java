@@ -18,15 +18,15 @@ import javafx.stage.Stage;
 import model.Messages;
 import model.Product;
 import dao.Const;
-import dao.DatabeseHandler;
+import dao.DatabaseHandler;
 
 public class MainPageControler {
-    private DatabeseHandler handler = new DatabeseHandler();
+    private DatabaseHandler handler = new DatabaseHandler();
     private AlertWindow window = new AlertWindow();
     private final String byPrice = "Price";
     private final String byBrand = "Brand";
     private final String byId = "ID";
-    private String sortChose = byId;
+    private String sortChoose = byId;
 
     @FXML
     private ListView<Product> productsList;
@@ -53,7 +53,7 @@ public class MainPageControler {
     private Label moneyLabel;
 
     @FXML
-    private Button search;
+    private Button searchButton;
 
     @FXML
     private TextArea messagesText;
@@ -69,10 +69,10 @@ public class MainPageControler {
 
     @FXML
     void initialize() {
-        printProductsList(sortChose);
+        printProductsList(sortChoose);
         printOrderList();
         showAllMessages();
-        fillChoseBox();
+        fillChooseBox();
         moneyLabel.setText(String.valueOf(calculatePrice()));
         yourMoney.setText(String.valueOf(getUserMoney()));
 
@@ -87,14 +87,14 @@ public class MainPageControler {
                 handler.removeItemList(listId);
                 window.showInformationWindow("You have successfully purchased the product");
                 handler.unconfirmUser(LoginController.NAME_USER);
-                printProductsList(sortChose);
+                printProductsList(sortChoose);
                 printOrderList();
             }
         });
 
         sortProducts.setOnAction(actionEvent -> {
-            sortChose = sortProducts.getValue();
-            printProductsList(sortChose);
+            sortChoose = sortProducts.getValue();
+            printProductsList(sortChoose);
         });
 
         sendButton.setOnAction(actionEvent -> {
@@ -122,10 +122,10 @@ public class MainPageControler {
             stage.show();
         });
 
-        search.setOnAction(actionEvent -> {
+        searchButton.setOnAction(actionEvent -> {
             if(searchTextField.getText().isBlank() || searchTextField.getText().isEmpty()){
                 window.showInformationWindow("Please, write brand product in field");
-                printProductsList(sortChose);
+                printProductsList(sortChoose);
             }else {
                 String txt = searchTextField.getText();
                 ResultSet resultSet = handler.getProductByName(txt);
@@ -142,7 +142,7 @@ public class MainPageControler {
                 addBuyer(list);
                 orderList.getItems().addAll(list);
                 productsList.getItems().clear();
-                printProductsList(sortChose);
+                printProductsList(sortChoose);
                 moneyLabel.setText(String.valueOf(calculatePrice()));
             }
         });
@@ -154,7 +154,7 @@ public class MainPageControler {
                 removeBuyer(list);
                 orderList.getItems().remove(i);
                 productsList.getItems().clear();
-                printProductsList(sortChose);
+                printProductsList(sortChoose);
                 moneyLabel.setText(String.valueOf(calculatePrice()));
             }
         });
@@ -259,7 +259,7 @@ public class MainPageControler {
         return list;
     }
 
-    private void fillChoseBox() {
+    private void fillChooseBox() {
         ObservableList<String> list = FXCollections.observableArrayList();
         list.add(byId);
         list.add(byPrice);

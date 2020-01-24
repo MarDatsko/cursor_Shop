@@ -101,16 +101,4 @@ public class User {
     public void setStatusOrder(Boolean statusOrder) {
         this.statusOrder = statusOrder;
     }
-
-    public boolean isUserHaveEmptyLine(User user) {
-        boolean boo = false;
-        boo = user.getNickName().isEmpty();
-        boo = user.getPassword().isEmpty();
-        boo = user.getCountry().isEmpty();
-        boo = user.getGender().isEmpty();
-        boo = user.getFirstName().isEmpty();
-        boo = user.getSecondName().isEmpty();
-        boo = String.valueOf(user.getMoney()).isEmpty();
-        return boo;
-    }
 }

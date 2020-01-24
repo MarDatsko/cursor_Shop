@@ -35,12 +35,12 @@
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <ListView fx:id="orderList" layoutX="273.0" layoutY="163.0" prefHeight="95.0" prefWidth="255.0" />
-      <Button fx:id="search" layoutX="419.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0" text="Search">
+      <ListView fx:id="orderList" layoutX="273.0" layoutY="123.0" prefHeight="135.0" prefWidth="255.0" />
+      <Button fx:id="searchButton" layoutX="419.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0" text="Search">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Label layoutX="344.0" layoutY="128.0" prefHeight="32.0" prefWidth="119.0" text="My Order ">
+      <Label layoutX="354.0" layoutY="91.0" prefHeight="32.0" prefWidth="119.0" text="My Order ">
          <font>
             <Font size="22.0" />
          </font></Label>
@@ -63,7 +63,7 @@
             <Font size="15.0" />
          </font></Button>
       <Label layoutX="532.0" layoutY="160.0" prefHeight="25.0" prefWidth="66.0" text="Total cost" />
-      <Label fx:id="moneyLabel" layoutX="607.0" layoutY="160.0" prefHeight="25.0" prefWidth="93.0" text="Label">
+      <Label fx:id="moneyLabel" layoutX="607.0" layoutY="160.0" prefHeight="25.0" prefWidth="93.0" text="0">
          <font>
             <Font size="14.0" />
          </font></Label>
@@ -72,7 +72,7 @@
             <Font size="15.0" />
          </font></Button>
       <Label layoutX="533.0" layoutY="185.0" prefHeight="25.0" prefWidth="66.0" text="Your money" />
-      <Label fx:id="yourMoney" layoutX="607.0" layoutY="185.0" prefHeight="25.0" prefWidth="93.0" text="Label">
+      <Label fx:id="yourMoney" layoutX="607.0" layoutY="185.0" prefHeight="25.0" prefWidth="93.0" text="0">
          <font>
             <Font size="14.0" />
          </font>

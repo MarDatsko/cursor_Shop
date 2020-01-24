@@ -23,8 +23,8 @@
                 <Image url="@../resurses/logo.png" />
             </image>
         </ImageView>
-      <ListView fx:id="allListView" layoutX="179.0" layoutY="79.0" prefHeight="137.0" prefWidth="284.0" />
-      <ComboBox fx:id="choseUserComboBox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" />
+      <ListView fx:id="allProductsList" layoutX="179.0" layoutY="79.0" prefHeight="137.0" prefWidth="284.0" />
+      <ComboBox fx:id="chooseUserComboBox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="brandText" layoutX="531.0" layoutY="125.0" promptText="Brand">
          <font>
             <Font size="13.0" />
@@ -60,7 +60,7 @@
             <Font size="18.0" />
          </font></Label>
       <ListView fx:id="messageList" layoutX="14.0" layoutY="231.0" prefHeight="82.0" prefWidth="450.0" />
-      <TextArea fx:id="writeMessage" layoutX="14.0" layoutY="326.0" prefHeight="47.0" prefWidth="368.0" promptText="Write message">
+      <TextArea fx:id="messageText" layoutX="14.0" layoutY="326.0" prefHeight="47.0" prefWidth="368.0" promptText="Write message">
          <font>
             <Font size="13.0" />
          </font></TextArea>

@@ -26,7 +26,7 @@
         <Label layoutX="333.0" layoutY="120.0" />
       <AnchorPane layoutX="117.0" layoutY="2.0" prefHeight="353.0" prefWidth="448.0">
          <children>
-            <TextField fx:id="textFieldFirstName" layoutX="173.0" layoutY="44.0" prefHeight="31.0" prefWidth="228.0" promptText="First name">
+            <TextField fx:id="firstNameTextField" layoutX="173.0" layoutY="44.0" prefHeight="31.0" prefWidth="228.0" promptText="First name">
                <font>
                   <Font size="15.0" />
                </font></TextField>
@@ -34,7 +34,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <TextField fx:id="textFieldSecondName" layoutX="173.0" layoutY="77.0" prefHeight="31.0" prefWidth="228.0" promptText="Second name">
+            <TextField fx:id="secondNameTextField" layoutX="173.0" layoutY="77.0" prefHeight="31.0" prefWidth="228.0" promptText="Second name">
                <font>
                   <Font size="15.0" />
                </font></TextField>
@@ -42,7 +42,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <TextField fx:id="textFieldNickName" layoutX="173.0" layoutY="109.0" prefHeight="31.0" prefWidth="228.0" promptText="Nick name">
+            <TextField fx:id="nickNameTextField" layoutX="173.0" layoutY="109.0" prefHeight="31.0" prefWidth="228.0" promptText="Nick name">
                <font>
                   <Font size="15.0" />
                </font></TextField>
@@ -50,7 +50,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <TextField fx:id="textFieldPassword" layoutX="173.0" layoutY="142.0" prefHeight="31.0" prefWidth="228.0" promptText="Password">
+            <TextField fx:id="passwordTextField" layoutX="173.0" layoutY="142.0" prefHeight="31.0" prefWidth="228.0" promptText="Password">
                <font>
                   <Font size="15.0" />
                </font></TextField>
@@ -67,7 +67,7 @@
                   <Font size="18.0" />
                </font></Label>
             <Group layoutX="33.0" layoutY="141.0" />
-            <RadioButton fx:id="radioButtonMale" layoutX="183.0" layoutY="248.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="69.0" text="Male" textFill="#36f492">
+            <RadioButton fx:id="maleRadioButton" layoutX="183.0" layoutY="248.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="69.0" text="Male" textFill="#36f492">
                <toggleGroup>
                   <ToggleGroup fx:id="gender" />
                </toggleGroup>
@@ -75,7 +75,7 @@
                   <Font size="15.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="radioButtonFemale" layoutX="271.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Female" textFill="#36f492" toggleGroup="$gender">
+            <RadioButton fx:id="femaleRadioButton" layoutX="271.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Female" textFill="#36f492" toggleGroup="$gender">
                <font>
                   <Font size="16.0" />
                </font></RadioButton>
@@ -83,7 +83,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Button fx:id="buttonSave" layoutX="177.0" layoutY="294.0" mnemonicParsing="false" prefHeight="1.0" prefWidth="106.0" text="Save">
+            <Button fx:id="saveButton" layoutX="177.0" layoutY="294.0" mnemonicParsing="false" prefHeight="1.0" prefWidth="106.0" text="Save">
                <font>
                   <Font name="Impact" size="24.0" />
                </font></Button>

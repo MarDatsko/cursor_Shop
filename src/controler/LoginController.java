@@ -14,31 +14,31 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import dao.Const;
-import dao.DatabeseHandler;
+import dao.DatabaseHandler;
 import model.User;
 
 public class LoginController {
-    private DatabeseHandler handler = new DatabeseHandler();
+    private DatabaseHandler handler = new DatabaseHandler();
     private AlertWindow window = new AlertWindow();
     public static String NAME_USER;
 
     @FXML
-    private TextField textFieldLogin;
+    private TextField loginText;
 
     @FXML
-    private TextField textFieldPassword;
+    private TextField passwordText;
 
     @FXML
-    private Button buttonLogin;
+    private Button loginButton;
 
     @FXML
-    private Hyperlink hyperlinkRegistration;
+    private Hyperlink registrationHyperlink;
 
     @FXML
     void initialize() {
-        buttonLogin.setOnAction(actionEvent -> {
-            String loginText = textFieldLogin.getText().trim();
-            String passwordText = textFieldPassword.getText().trim();
+        loginButton.setOnAction(actionEvent -> {
+            String loginText = this.loginText.getText().trim();
+            String passwordText = this.passwordText.getText().trim();
             if (!loginText.equals("") && !passwordText.equals("")) {
                 loginUser(loginText, passwordText);
             } else {
@@ -46,16 +46,16 @@ public class LoginController {
             }
         });
 
-        hyperlinkRegistration.setOnAction(actionEvent -> {
-            hyperlinkRegistration.getScene().getWindow().hide();
+        registrationHyperlink.setOnAction(actionEvent -> {
+            registrationHyperlink.getScene().getWindow().hide();
             goToThePage("/view/registration.fxml");
         });
     }
 
     private void loginUser(String loginText, String passwordText) {
         User user = new User();
-        user.setNickName(textFieldLogin.getText());
-        user.setPassword(textFieldPassword.getText());
+        user.setNickName(this.loginText.getText());
+        user.setPassword(this.passwordText.getText());
         String nickName = null;
         String password = null;
         int statusUser = 0;
@@ -82,12 +82,12 @@ public class LoginController {
     }
 
     private void goToTheAdminPage() {
-        buttonLogin.getScene().getWindow().hide();
+        loginButton.getScene().getWindow().hide();
         goToThePage("/view/adminPage.fxml");
     }
 
     private void goToTheMainPage() {
-        buttonLogin.getScene().getWindow().hide();
+        loginButton.getScene().getWindow().hide();
         goToThePage("/view/mainPage.fxml");
     }
 

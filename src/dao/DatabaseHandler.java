@@ -9,8 +9,8 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DatabeseHandler extends Configs {
-    public Connection getDbConnectiont() throws ClassNotFoundException, SQLException {
+public class DatabaseHandler extends Configs {
+    public Connection getDbConnection() throws ClassNotFoundException, SQLException {
         String connectionString = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(connectionString, dbUser, dbPass);
@@ -22,7 +22,7 @@ public class DatabeseHandler extends Configs {
                 + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER +",money"+ ")"
                 + "VALUES(?,?,?,?,?,?,?)";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(insert);
+            PreparedStatement prSt = getDbConnection().prepareStatement(insert);
             prSt.setString(1, user.getNickName());
             prSt.setString(2, user.getFirstName());
             prSt.setString(3, user.getSecondName());
@@ -43,7 +43,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.users WHERE nickname =? AND password =?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, user.getNickName());
             prSt.setString(2, user.getPassword());
 
@@ -58,7 +58,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE name =? AND buyer IS NULL";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, txt);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
@@ -71,7 +71,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.messages WHERE author=? AND keyUser=? OR author=?" ;
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,"admin");
             prSt.setString(2, LoginController.NAME_USER);
             prSt.setString(3, LoginController.NAME_USER);
@@ -86,7 +86,7 @@ public class DatabeseHandler extends Configs {
         String sql = "INSERT INTO cursor.messages"+"("+Const.MESSAGES_AUTHOR+","+Const.MESSAGES_MESSAGE+","+Const.MESSAGES_KEY+")"
                 + "VALUES (?,?,?)";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,message.getAuthor());
             prSt.setString(2, message.getMessages());
             prSt.setString(3, message.getKeyUser());
@@ -101,7 +101,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT "+Const.USER_NICK_NAME+" FROM cursor.users";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -113,7 +113,7 @@ public class DatabeseHandler extends Configs {
         String sql = "INSERT INTO cursor.products"+"("+Const.PRODUCTS_NAME+","+Const.PRODUCTS_PRICE+","+Const.PRODUCTS_MODEL+")"
                 +"VALUES (?,?,?)";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, product.getName());
             prSt.setString(2, String.valueOf(product.getPrice()));
             prSt.setString(3, product.getModel());
@@ -127,7 +127,7 @@ public class DatabeseHandler extends Configs {
     public void changeProductInDatabase(Product product) {
         String sql = "UPDATE cursor.products SET name=?, price=?, model=? WHERE idproducts=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, product.getName());
             prSt.setString(2, String.valueOf(product.getPrice()));
             prSt.setString(3, product.getModel());
@@ -143,7 +143,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.messages WHERE author=? AND keyUser=? OR author=?" ;
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,"admin");
             prSt.setString(2, nickName);
             prSt.setString(3, nickName);
@@ -157,7 +157,7 @@ public class DatabeseHandler extends Configs {
     public void setBuyer(Product product) {
         String sql = "UPDATE cursor.products SET buyer=? WHERE idproducts=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, product.getBuyer());
             prSt.setString(2, String.valueOf(product.getId()));
 
@@ -171,7 +171,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE buyer=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,buyer);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
@@ -184,7 +184,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -196,7 +196,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY price DESC";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -208,7 +208,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY name";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.products WHERE buyer IS NULL ORDER BY idproducts";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class DatabeseHandler extends Configs {
     public void blockUser(String nickName) {
         String sql = "UPDATE cursor.users SET statususer=? WHERE nickname=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setInt(1, 0);
             prSt.setString(2, nickName);
 
@@ -244,7 +244,7 @@ public class DatabeseHandler extends Configs {
     public void unblockUser(String nickName) {
         String sql = "UPDATE cursor.users SET statususer=? WHERE nickname=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setInt(1, 1);
             prSt.setString(2, nickName);
 
@@ -258,7 +258,7 @@ public class DatabeseHandler extends Configs {
         ResultSet resultSet = null;
         String sql = "SELECT * FROM cursor.users WHERE nickname=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,nickName);
 
             resultSet = prSt.executeQuery();
@@ -271,7 +271,7 @@ public class DatabeseHandler extends Configs {
     public void unconfirmUser(String nickName) {
         String sql = "UPDATE cursor.users SET statusorder=? WHERE nickname=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setInt(1, 0);
             prSt.setString(2, nickName);
 
@@ -284,7 +284,7 @@ public class DatabeseHandler extends Configs {
     public void confirmUser(String nickName) {
         String sql = "UPDATE cursor.users SET statusorder=? WHERE nickname=?";
         try {
-            PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setInt(1, 1);
             prSt.setString(2, nickName);
 
@@ -294,12 +294,12 @@ public class DatabeseHandler extends Configs {
         }
     }
 
-    public void removeItemList(List<Integer> iteamList) {
-        LinkedList<Integer> list = new LinkedList<>(iteamList);
+    public void removeItemList(List<Integer> itemList) {
+        LinkedList<Integer> list = new LinkedList<>(itemList);
         String sql = "DELETE FROM cursor.products WHERE idproducts=?";
         for (Integer id : list){
             try {
-                PreparedStatement prSt = getDbConnectiont().prepareStatement(sql);
+                PreparedStatement prSt = getDbConnection().prepareStatement(sql);
                 prSt.setInt(1, id);
 
                 prSt.executeUpdate();

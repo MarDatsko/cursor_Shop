@@ -14,19 +14,19 @@ import model.Messages;
 import model.Product;
 import model.User;
 import dao.Const;
-import dao.DatabeseHandler;
+import dao.DatabaseHandler;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminController {
-    private DatabeseHandler handler = new DatabeseHandler();
+    private DatabaseHandler handler = new DatabaseHandler();
     private AlertWindow window = new AlertWindow();
     public static Integer idEdit;
 
     @FXML
-    private ListView<Product> allListView;
+    private ListView<Product> allProductsList;
 
     @FXML
     private Button blockButton;
@@ -41,7 +41,7 @@ public class AdminController {
     private Label totalMoney;
 
     @FXML
-    private ComboBox<User> choseUserComboBox;
+    private ComboBox<User> chooseUserComboBox;
 
     @FXML
     private TextField brandText;
@@ -65,7 +65,7 @@ public class AdminController {
     private ListView<Messages> messageList;
 
     @FXML
-    private TextArea writeMessage;
+    private TextArea messageText;
 
     @FXML
     private Button sendButton;
@@ -86,49 +86,49 @@ public class AdminController {
         totalMoney.setText(calculatePrice().toString());
 
         unconfirmButton.setOnAction(actionEvent -> {
-            handler.unconfirmUser(String.valueOf(choseUserComboBox.getValue()));
+            handler.unconfirmUser(String.valueOf(chooseUserComboBox.getValue()));
             unconfirmButton.setStyle("-fx-background-color: #FF0000");
             confirmButton.setStyle("-fx-background-color: #DCDCDC");
             showButtonColor();
         });
 
         confirmButton.setOnAction(actionEvent -> {
-            handler.confirmUser(String.valueOf(choseUserComboBox.getValue()));
+            handler.confirmUser(String.valueOf(chooseUserComboBox.getValue()));
             confirmButton.setStyle("-fx-background-color: #32CD32");
             unconfirmButton.setStyle("-fx-background-color: #DCDCDC");
             showButtonColor();
         });
 
         blockButton.setOnAction(actionEvent -> {
-            handler.blockUser(String.valueOf(choseUserComboBox.getValue()));
+            handler.blockUser(String.valueOf(chooseUserComboBox.getValue()));
             blockButton.setStyle("-fx-background-color: #FF0000");
             unblockButton.setStyle("-fx-background-color: #DCDCDC");
             showButtonColor();
         });
 
         unblockButton.setOnAction(actionEvent -> {
-            handler.unblockUser(String.valueOf(choseUserComboBox.getValue()));
+            handler.unblockUser(String.valueOf(chooseUserComboBox.getValue()));
             unblockButton.setStyle("-fx-background-color: #32CD32");
             blockButton.setStyle("-fx-background-color: #DCDCDC");
             showButtonColor();
         });
 
         sendButton.setOnAction(actionEvent -> {
-            if(writeMessage.getText().isEmpty() || writeMessage.getText().isBlank()){
+            if(messageText.getText().isEmpty() || messageText.getText().isBlank()){
                 window.showInformationWindow("Please, write message");
-            }else if (choseUserComboBox.getValue() == null){
+            }else if (chooseUserComboBox.getValue() == null){
                 window.showInformationWindow("Choose user what you want write a message");
             } else {
                 sendMessages();
-                showMessages(String.valueOf(choseUserComboBox.getValue()));
-                writeMessage.clear();
+                showMessages(String.valueOf(chooseUserComboBox.getValue()));
+                messageText.clear();
             }
         });
 
-        choseUserComboBox.setOnAction(actionEvent -> {
+        chooseUserComboBox.setOnAction(actionEvent -> {
             showButtonColor();
-            showMessages(String.valueOf(choseUserComboBox.getValue()));
-            printOrder(String.valueOf(choseUserComboBox.getValue()));
+            showMessages(String.valueOf(chooseUserComboBox.getValue()));
+            printOrder(String.valueOf(chooseUserComboBox.getValue()));
             userMoney.setText(String.valueOf(getUserMoney()));
             totalMoney.setText(String.valueOf(calculatePrice()));
             clearBrandModelPrice();
@@ -168,16 +168,16 @@ public class AdminController {
 
         allProductsButton.setOnAction(actionEvent -> {
             showAllProducts();
-            choseUserComboBox.getSelectionModel().clearSelection();
+            chooseUserComboBox.getSelectionModel().clearSelection();
         });
 
-        allListView.setOnMouseClicked(mouseEvent -> {
+        allProductsList.setOnMouseClicked(mouseEvent -> {
 
-            if (mouseEvent.getClickCount() == 2 & !productHasBuyer()) {
+            if (mouseEvent.getClickCount() == 2 & !isProductHasBuyer()) {
                 clearBrandModelPrice();
                 window.showInformationWindow("You don't change date when\nuser add product to order");
             } else if (mouseEvent.getClickCount() == 2) {
-                ObservableList<Product> list = allListView.getSelectionModel().getSelectedItems();
+                ObservableList<Product> list = allProductsList.getSelectionModel().getSelectedItems();
                 Product product = list.get(0);
                 idEdit = product.getId();
                 brandText.setText(product.getName());
@@ -202,8 +202,8 @@ public class AdminController {
         });
     }
 
-    private boolean productHasBuyer() {
-        ObservableList<Product> list = allListView.getSelectionModel().getSelectedItems();
+    private boolean isProductHasBuyer() {
+        ObservableList<Product> list = allProductsList.getSelectionModel().getSelectedItems();
         Product product = list.get(0);
         System.out.println(product.getBuyer());
         return product.getBuyer() == null;
@@ -212,7 +212,7 @@ public class AdminController {
     private void showButtonColor() {
         int statusUser = 0;
         int statusOrder = 0;
-        ResultSet resultSet = handler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        ResultSet resultSet = handler.getUserAndOrderStatus(String.valueOf(chooseUserComboBox.getValue()));
         try {
             while (resultSet.next()) {
                 statusUser = resultSet.getInt(Const.USER_STATUS_USER);
@@ -246,13 +246,13 @@ public class AdminController {
     }
 
     private Double calculatePrice() {
-        return allListView.getItems().stream().mapToDouble(Product::getPrice).sum();
+        return allProductsList.getItems().stream().mapToDouble(Product::getPrice).sum();
     }
 
     private Double getUserMoney(){
-        handler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        handler.getUserAndOrderStatus(String.valueOf(chooseUserComboBox.getValue()));
         double userMoney = 0.0d;
-        ResultSet resultSet = handler.getUserAndOrderStatus(String.valueOf(choseUserComboBox.getValue()));
+        ResultSet resultSet = handler.getUserAndOrderStatus(String.valueOf(chooseUserComboBox.getValue()));
         try {
             while (resultSet.next()) {
                 userMoney = resultSet.getDouble(Const.USER_MONEY);
@@ -280,8 +280,8 @@ public class AdminController {
         } catch (SQLException t) {
             t.getStackTrace();
         }
-        allListView.getItems().clear();
-        allListView.getItems().addAll(list);
+        allProductsList.getItems().clear();
+        allProductsList.getItems().addAll(list);
     }
 
     private void showAllProducts() {
@@ -300,8 +300,8 @@ public class AdminController {
         } catch (SQLException t) {
             t.getStackTrace();
         }
-        allListView.getItems().clear();
-        allListView.getItems().addAll(list);
+        allProductsList.getItems().clear();
+        allProductsList.getItems().addAll(list);
     }
 
     private void clearBrandModelPrice() {
@@ -322,7 +322,7 @@ public class AdminController {
         } catch (SQLException t) {
             t.getStackTrace();
         }
-        choseUserComboBox.setItems(usersList);
+        chooseUserComboBox.setItems(usersList);
     }
 
     private void showMessages(String nickName){
@@ -347,8 +347,8 @@ public class AdminController {
     private void sendMessages(){
         Messages message = new Messages();
         message.setAuthor(LoginController.NAME_USER);
-        message.setMessages(writeMessage.getText());
-        message.setKeyUser(String.valueOf(choseUserComboBox.getValue()));
+        message.setMessages(messageText.getText());
+        message.setKeyUser(String.valueOf(chooseUserComboBox.getValue()));
         handler.sendMessagesIntoDatabase(message);
     }
 }
