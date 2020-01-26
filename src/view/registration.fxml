@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controler.RegistrationController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="700.0">
+            <image>
+                <Image url="@../resources/fon.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="142.0" fitWidth="168.0" layoutX="524.0" layoutY="66.0">
+            <image>
+                <Image url="@../resources/logo.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="333.0" layoutY="120.0" />
+      <AnchorPane layoutX="117.0" layoutY="2.0" prefHeight="353.0" prefWidth="448.0">
+         <children>
+            <TextField fx:id="firstNameTextField" layoutX="173.0" layoutY="44.0" prefHeight="31.0" prefWidth="228.0" promptText="First name">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="43.0" layoutY="44.0" prefHeight="31.0" prefWidth="106.0" text="First name" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <TextField fx:id="secondNameTextField" layoutX="173.0" layoutY="77.0" prefHeight="31.0" prefWidth="228.0" promptText="Second name">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="43.0" layoutY="77.0" prefHeight="31.0" prefWidth="125.0" text="Second name" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <TextField fx:id="nickNameTextField" layoutX="173.0" layoutY="109.0" prefHeight="31.0" prefWidth="228.0" promptText="Nick name">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="43.0" layoutY="109.0" prefHeight="31.0" prefWidth="106.0" text="Nick name" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <TextField fx:id="passwordTextField" layoutX="173.0" layoutY="142.0" prefHeight="31.0" prefWidth="228.0" promptText="Password">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="43.0" layoutY="142.0" prefHeight="31.0" prefWidth="106.0" text="Password" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <TextField fx:id="countryTextField" layoutX="173.0" layoutY="175.0" prefHeight="31.0" prefWidth="228.0" promptText="Country">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="43.0" layoutY="174.0" prefHeight="31.0" prefWidth="106.0" text="Country" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Group layoutX="33.0" layoutY="141.0" />
+            <RadioButton fx:id="maleRadioButton" layoutX="183.0" layoutY="248.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="69.0" text="Male" textFill="#36f492">
+               <toggleGroup>
+                  <ToggleGroup fx:id="gender" />
+               </toggleGroup>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="femaleRadioButton" layoutX="271.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Female" textFill="#36f492" toggleGroup="$gender">
+               <font>
+                  <Font size="16.0" />
+               </font></RadioButton>
+            <Label layoutX="47.0" layoutY="243.0" prefHeight="31.0" prefWidth="106.0" text="Gender" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Button fx:id="saveButton" layoutX="177.0" layoutY="294.0" mnemonicParsing="false" prefHeight="1.0" prefWidth="106.0" text="Save">
+               <font>
+                  <Font name="Impact" size="24.0" />
+               </font></Button>
+            <Label layoutX="45.0" layoutY="208.0" prefHeight="31.0" prefWidth="106.0" text="Money" textFill="#36f492">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <TextField fx:id="moneyTextField" layoutX="173.0" layoutY="208.0" prefHeight="31.0" prefWidth="228.0" promptText="Money">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+         </children>
+      </AnchorPane>
+      <Button fx:id="exitButton" layoutX="655.0" layoutY="2.0" mnemonicParsing="false" text="Exit" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+    </children>
+</AnchorPane>

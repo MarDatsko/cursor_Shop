@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controler.AdminController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="700.0">
+            <image>
+                <Image url="@../resources/fon.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="137.0" fitWidth="162.0" layoutX="504.0" layoutY="-7.0">
+            <image>
+                <Image url="@../resources/logo.png" />
+            </image>
+        </ImageView>
+      <ListView fx:id="allProductsList" layoutX="179.0" layoutY="79.0" prefHeight="137.0" prefWidth="284.0" />
+      <ComboBox fx:id="chooseUserComboBox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" promptText="Choose user" />
+      <TextField fx:id="brandText" layoutX="531.0" layoutY="125.0" promptText="Brand">
+         <font>
+            <Font size="13.0" />
+         </font></TextField>
+      <TextField fx:id="priceText" layoutX="531.0" layoutY="157.0" promptText="Price">
+         <font>
+            <Font size="13.0" />
+         </font></TextField>
+      <TextField fx:id="modelText" layoutX="532.0" layoutY="189.0" promptText="Model">
+         <font>
+            <Font size="13.0" />
+         </font></TextField>
+      <Button fx:id="saveButton" layoutX="553.0" layoutY="230.0" mnemonicParsing="false" text="Save">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Label layoutX="477.0" layoutY="127.0" prefHeight="17.0" prefWidth="52.0" text="Brand">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="478.0" layoutY="158.0" prefHeight="17.0" prefWidth="52.0" text="Price">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="477.0" layoutY="191.0" prefHeight="17.0" prefWidth="52.0" text="Model">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Button fx:id="confirmButton" layoutX="14.0" layoutY="189.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Confirm" />
+      <Button fx:id="unconfirmButton" layoutX="95.0" layoutY="189.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Unconfirm" />
+      <Label contentDisplay="CENTER" layoutX="258.0" layoutY="48.0" prefHeight="27.0" prefWidth="89.0" text="User Order" textAlignment="CENTER" textFill="#00ff9d" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <ListView fx:id="messageList" layoutX="14.0" layoutY="231.0" prefHeight="82.0" prefWidth="450.0" />
+      <TextArea fx:id="messageText" layoutX="14.0" layoutY="326.0" prefHeight="47.0" prefWidth="368.0" promptText="Write message">
+         <font>
+            <Font size="13.0" />
+         </font></TextArea>
+      <Button fx:id="sendButton" layoutX="394.0" layoutY="326.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="69.0" text="Send">
+         <font>
+            <Font size="19.0" />
+         </font></Button>
+      <Button fx:id="addButton" layoutX="612.0" layoutY="230.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="52.0" text="Add">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button fx:id="allProductsButton" layoutX="359.0" layoutY="46.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="103.0" text="AllProducts">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <Button fx:id="blockButton" layoutX="95.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Block" />
+      <Button fx:id="unblockButton" layoutX="14.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Unblock" />
+      <Label fx:id="userMoney" layoutX="266.0" layoutY="14.0" prefHeight="25.0" prefWidth="81.0" text="0">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label fx:id="totalMoney" layoutX="421.0" layoutY="14.0" prefHeight="25.0" prefWidth="75.0" text="0">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="179.0" layoutY="14.0" prefHeight="25.0" prefWidth="89.0" text="User money" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="348.0" layoutY="14.0" prefHeight="25.0" prefWidth="69.0" text="Total cost" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Button fx:id="exitButton" layoutX="654.0" layoutY="2.0" mnemonicParsing="false" text="Exit" textFill="RED">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+    </children>
+</AnchorPane>
