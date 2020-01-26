@@ -17,12 +17,12 @@
     <children>
         <ImageView fitHeight="400.0" fitWidth="700.0">
             <image>
-                <Image url="@../resurses/fon.jpg" />
+                <Image url="@../resources/fon.jpg" />
             </image>
         </ImageView>
         <ImageView fitHeight="151.0" fitWidth="168.0" layoutX="485.0">
             <image>
-                <Image url="@../resurses/logo.png" />
+                <Image url="@../resources/logo.png" />
             </image>
         </ImageView>
       <VBox layoutX="14.0" layoutY="47.0" prefHeight="340.0" prefWidth="256.0">

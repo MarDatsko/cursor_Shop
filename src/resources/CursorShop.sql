@@ -30,6 +30,10 @@ CREATE TABLE `products` (
   UNIQUE KEY `idproducts_UNIQUE` (`idproducts`)
 ) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `cursor`.`users` (`nickname`,`firstname`,`secondname`,`password`,`country`,`gender`,`statususer`,`statusorder`,`money`)
+VALUES(MarDatsko, Marian, Datsko, 1111, Ukraine, Male, 1, 0, 500500);
+
+
 INSERT INTO `cursor`.`products`(`idproducts`,`name`,`price`,`model`,`buyer`) VALUES (00000000001, HP, 100, 15-rb012ur, null);
 INSERT INTO `cursor`.`products`(`idproducts`,`name`,`price`,`model`,`buyer`) VALUES (00000000002, LENOVO, 5000, IdeaPad-S145, null);
 INSERT INTO `cursor`.`products`(`idproducts`,`name`,`price`,`model`,`buyer`) VALUES (00000000003, ACER,	18000, Aspire-A315-42-R94P, null);

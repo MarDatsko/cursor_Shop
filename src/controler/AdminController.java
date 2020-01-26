@@ -84,6 +84,7 @@ public class AdminController {
         fillCommonBoxWithUsers();
         showAllProducts();
         totalMoney.setText(calculatePrice().toString());
+        chooseUserComboBox.setPromptText("Choose user");
 
         unconfirmButton.setOnAction(actionEvent -> {
             handler.unconfirmUser(String.valueOf(chooseUserComboBox.getValue()));
@@ -175,7 +176,7 @@ public class AdminController {
 
             if (mouseEvent.getClickCount() == 2 & !isProductHasBuyer()) {
                 clearBrandModelPrice();
-                window.showInformationWindow("You don't change date when\nuser add product to order");
+                window.showInformationWindow("You don't change data when\nuser add product to order");
             } else if (mouseEvent.getClickCount() == 2) {
                 ObservableList<Product> list = allProductsList.getSelectionModel().getSelectedItems();
                 Product product = list.get(0);

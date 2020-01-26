@@ -18,11 +18,9 @@ public class DatabaseHandler extends Configs {
 
     public boolean singUpUser(User user) {
         boolean isAddedUser = false;
-        String insert = "INSERT INTO " + Const.USER_TABLE + "(" + Const.USER_NICK_NAME + "," + Const.USER_FIRST_NAME
-                + "," + Const.USER_SECOND_NAME + "," + Const.USER_PASSWORD + "," + Const.USER_COUNTRY + "," + Const.USER_GENDER +",money"+ ")"
-                + "VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO cursor.users (nickname, firstname, secondname, password, country, gender, money) VALUES(?,?,?,?,?,?,?)";
         try {
-            PreparedStatement prSt = getDbConnection().prepareStatement(insert);
+            PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, user.getNickName());
             prSt.setString(2, user.getFirstName());
             prSt.setString(3, user.getSecondName());
@@ -83,8 +81,7 @@ public class DatabaseHandler extends Configs {
     }
 
     public void sendMessagesIntoDatabase(Messages message) {
-        String sql = "INSERT INTO cursor.messages"+"("+Const.MESSAGES_AUTHOR+","+Const.MESSAGES_MESSAGE+","+Const.MESSAGES_KEY+")"
-                + "VALUES (?,?,?)";
+        String sql = "INSERT INTO cursor.messages (author, message, keyUser) VALUES (?,?,?)";
         try {
             PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1,message.getAuthor());
@@ -99,7 +96,7 @@ public class DatabaseHandler extends Configs {
 
     public ResultSet getUsersNickName() {
         ResultSet resultSet = null;
-        String sql = "SELECT "+Const.USER_NICK_NAME+" FROM cursor.users";
+        String sql = "SELECT nickname FROM cursor.users";
         try {
             PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             resultSet = prSt.executeQuery();
@@ -110,8 +107,7 @@ public class DatabaseHandler extends Configs {
     }
 
     public void addProductsIntoDatabase(Product product) {
-        String sql = "INSERT INTO cursor.products"+"("+Const.PRODUCTS_NAME+","+Const.PRODUCTS_PRICE+","+Const.PRODUCTS_MODEL+")"
-                +"VALUES (?,?,?)";
+        String sql = "INSERT INTO cursor.products(name, price, model) VALUES (?,?,?)";
         try {
             PreparedStatement prSt = getDbConnection().prepareStatement(sql);
             prSt.setString(1, product.getName());

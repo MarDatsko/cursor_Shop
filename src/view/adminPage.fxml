@@ -15,16 +15,16 @@
     <children>
         <ImageView fitHeight="400.0" fitWidth="700.0">
             <image>
-                <Image url="@../resurses/fon.jpg" />
+                <Image url="@../resources/fon.jpg" />
             </image>
         </ImageView>
         <ImageView fitHeight="137.0" fitWidth="162.0" layoutX="504.0" layoutY="-7.0">
             <image>
-                <Image url="@../resurses/logo.png" />
+                <Image url="@../resources/logo.png" />
             </image>
         </ImageView>
       <ListView fx:id="allProductsList" layoutX="179.0" layoutY="79.0" prefHeight="137.0" prefWidth="284.0" />
-      <ComboBox fx:id="chooseUserComboBox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" />
+      <ComboBox fx:id="chooseUserComboBox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="150.0" promptText="Choose user" />
       <TextField fx:id="brandText" layoutX="531.0" layoutY="125.0" promptText="Brand">
          <font>
             <Font size="13.0" />
